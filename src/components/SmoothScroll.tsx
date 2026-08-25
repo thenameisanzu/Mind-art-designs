@@ -17,6 +17,9 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     });
 
     lenisRef.current = lenis;
+    if (typeof window !== 'undefined') {
+      (window as any).lenisInstance = lenis;
+    }
 
     // Connect Lenis to requestAnimationFrame loop
     let rafId: number;
@@ -37,6 +40,9 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     return () => {
       cancelAnimationFrame(rafId);
       resizeObserver.disconnect();
+      if (typeof window !== 'undefined') {
+        (window as any).lenisInstance = null;
+      }
       lenis.destroy();
     };
   }, []);
