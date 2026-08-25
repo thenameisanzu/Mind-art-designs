@@ -7,13 +7,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Initialize Lenis buttery smooth scroll
+    // Initialize Lenis buttery smooth scroll with high friction
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // ultra smooth easeOutExpo curve
+      lerp: 0.06, // Low lerp for strong friction cushioning
+      wheelMultiplier: 0.65, // Dampen mouse wheel spins to prevent flying past
+      touchMultiplier: 1.2,
       infinite: false,
       gestureOrientation: 'vertical',
-      touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
