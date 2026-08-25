@@ -98,15 +98,15 @@ export default function Hero() {
   // Fade out other images as the main hero expands (slower fadeout)
   const underImagesOpacity = useTransform(smoothProgress, [0.65, 0.85], [1, 0]);
 
-  // Animate background image blur as it expands (stronger blur for text readability)
-  const imageBlur = useTransform(smoothProgress, [0.65, 0.92], ["blur(0px)", "blur(12px)"]);
+  // Animate background image blur as it expands (stronger blur triggers only at the last point)
+  const imageBlur = useTransform(smoothProgress, [0.85, 0.95], ["blur(0px)", "blur(12px)"]);
 
-  // Fade in the dark/warm color overlay over the expanded hero photo to keep overlay typography readable
-  const overlayOpacity = useTransform(smoothProgress, [0.70, 0.90], [0, 0.85]);
+  // Fade in the dark/warm color overlay over the expanded hero photo at the last point
+  const overlayOpacity = useTransform(smoothProgress, [0.85, 0.95], [0, 0.85]);
 
-  // Content typography is always visible as the primary hero section from landing page load
-  const contentOpacity = 1;
-  const contentY = 0;
+  // Fade in content typography ONLY at the last point of the hero section
+  const contentOpacity = useTransform(smoothProgress, [0.90, 0.98], [0, 1]);
+  const contentY = useTransform(smoothProgress, [0.90, 0.98], [20, 0]);
 
   // Image assets mapped to grid
   const images = {
