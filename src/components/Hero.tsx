@@ -24,11 +24,11 @@ export default function Hero() {
     offset: ["start start", "end end"],
   });
 
-  // Apply spring physics to scroll progress for organic motion
+  // Apply soft, heavy spring physics to scroll progress for cinematic slow-motion transitions
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 380, // Snappy response
-    damping: 45,    // Muted bounce
-    mass: 1.1,
+    stiffness: 90,   // Low stiffness for slower visual feedback
+    damping: 24,     // Cushioned settle with zero bounce
+    mass: 1.5,       // High mass for cinematic momentum lag
     restDelta: 0.001,
   });
 
@@ -54,22 +54,22 @@ export default function Hero() {
   const trX = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [xRight, xRight, xRight, "0vw", "0vw"]);
   const trY = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [yTop, yTop, yTop, "0vh", "0vh"]);
 
-  // Top Right Image (Hero background) expands to full viewport after merge phase (responsive starting bounds)
+  // Top Right Image (Hero background) expands to full viewport after merge phase (stretched range for slow expansion)
   const startWidth = isMobile ? "42vw" : "36vw";
   const startHeight = isMobile ? "18vh" : "24vh";
 
-  const heroWidth = useTransform(smoothProgress, [0.65, 0.72, 0.92, 1], [startWidth, startWidth, "100vw", "100vw"]);
-  const heroHeight = useTransform(smoothProgress, [0.65, 0.72, 0.92, 1], [startHeight, startHeight, "100vh", "100vh"]);
+  const heroWidth = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startWidth, startWidth, "100vw", "100vw"]);
+  const heroHeight = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startHeight, startHeight, "100vh", "100vh"]);
 
-  // Fade out other images as the main hero expands
-  const underImagesOpacity = useTransform(smoothProgress, [0.68, 0.78], [1, 0]);
+  // Fade out other images as the main hero expands (slower fadeout)
+  const underImagesOpacity = useTransform(smoothProgress, [0.65, 0.85], [1, 0]);
 
   // Fade in the dark/warm color overlay over the expanded hero photo to keep overlay typography readable
-  const overlayOpacity = useTransform(smoothProgress, [0.72, 0.88], [0, 0.55]);
+  const overlayOpacity = useTransform(smoothProgress, [0.70, 0.90], [0, 0.55]);
 
   // Fade in and slide up content typography near the end of expansion
-  const contentOpacity = useTransform(smoothProgress, [0.85, 0.96], [0, 1]);
-  const contentY = useTransform(smoothProgress, [0.85, 0.96], [40, 0]);
+  const contentOpacity = useTransform(smoothProgress, [0.88, 0.98], [0, 1]);
+  const contentY = useTransform(smoothProgress, [0.88, 0.98], [40, 0]);
 
   // Image assets mapped to grid
   const images = {
