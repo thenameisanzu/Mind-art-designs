@@ -24,13 +24,8 @@ export default function Hero() {
     offset: ["start start", "end end"],
   });
 
-  // Apply soft, heavy spring physics to scroll progress for cinematic slow-motion transitions
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,   // Low stiffness for slower visual feedback
-    damping: 24,     // Cushioned settle with zero bounce
-    mass: 1.5,       // High mass for cinematic momentum lag
-    restDelta: 0.001,
-  });
+  // Map scroll progress directly to prevent visual lagging desync on fast scrolls
+  const smoothProgress = scrollYProgress;
 
   // Default coordinate offsets relative to center for the 4 grid blocks
   const xLeft = isMobile ? "-25vw" : "-20vw";
