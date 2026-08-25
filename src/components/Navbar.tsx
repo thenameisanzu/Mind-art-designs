@@ -35,6 +35,9 @@ export default function Navbar() {
       <div className={styles.container}>
         <a href="#home" className={styles.logoContainer}>
           <img src="/logo.png" alt="MIND ART DESIGNS" className={styles.logoImage} />
+          <span className={styles.logoText}>
+            MIND ART <span>DESIGNS</span>
+          </span>
         </a>
 
         {/* Desktop Navigation */}

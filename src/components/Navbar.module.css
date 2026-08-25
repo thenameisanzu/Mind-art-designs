@@ -49,6 +49,43 @@
   display: flex;
   align-items: center;
   text-decoration: none;
+  position: relative;
+  margin-right: 48px; /* Extra space after brand name */
+  transition: var(--transition-smooth);
+}
+
+.logoContainer::after {
+  content: '';
+  position: absolute;
+  right: -24px; /* Centered in the 48px margin space */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 24px; /* Elegant, short vertical divider line */
+  background-color: var(--border-color);
+  transition: var(--transition-smooth);
+}
+
+.logoText {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin-left: 14px;
+  text-transform: uppercase;
+  transition: var(--transition-smooth);
+  display: inline-block;
+}
+
+.logoText span {
+  color: var(--accent);
+  font-weight: 300;
+}
+
+/* Adjust size slightly on scroll */
+.scrolled .logoText {
+  font-size: 1.05rem;
 }
 
 .logoImage {
@@ -151,6 +188,12 @@
   .mobileToggle {
     display: block;
   }
+  .logoContainer {
+    margin-right: 0;
+  }
+  .logoContainer::after {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -159,5 +202,13 @@
   }
   .logo {
     font-size: 1.3rem;
+  }
+  .logoText {
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    margin-left: 10px;
+  }
+  .scrolled .logoText {
+    font-size: 0.9rem;
   }
 }

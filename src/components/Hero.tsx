@@ -17,43 +17,6 @@ export default function Hero() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  const lockArmedRef = useRef(true);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-
-      const endOfHero = containerRef.current.offsetTop + containerRef.current.offsetHeight - window.innerHeight;
-      const currentScroll = window.scrollY;
-
-      // Re-arm speed bump lock if scrolling back up inside the hero section
-      if (currentScroll < endOfHero - 50) {
-        lockArmedRef.current = true;
-      }
-
-      // If the lock is armed and the scroll reaches or overflows the end of the hero
-      if (lockArmedRef.current && currentScroll >= endOfHero - 5) {
-        if ((window as any).lenisInstance) {
-          (window as any).lenisInstance.scrollTo(endOfHero, { immediate: true });
-        } else {
-          window.scrollTo(0, endOfHero);
-        }
-
-        // Reset the timeout. Disarm the lock ONLY when the scroll events pause for 200ms
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-          lockArmedRef.current = false;
-        }, 200);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: false });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
 
   // Tracks the scroll progress of the 450vh hero section
   const { scrollYProgress } = useScroll({
@@ -61,8 +24,12 @@ export default function Hero() {
     offset: ["start start", "end end"],
   });
 
-  // Map scroll progress directly to prevent visual lagging desync on fast scrolls
-  const smoothProgress = scrollYProgress;
+  // Apply a very snappy spring to smooth out scroll events on mobile/touch screens
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 800, // Snap quickly to scroll position
+    damping: 50,    // Perfectly damped catching up
+    mass: 0.1,      // Incredibly responsive, zero noticeable lag
+  });
 
   // Default coordinate offsets relative to center for the 4 grid blocks
   const xLeft = isMobile ? "-25vw" : "-20vw";
@@ -71,20 +38,20 @@ export default function Hero() {
   const yBottom = isMobile ? "12vh" : "14vh";
 
   // Top Left Image path translations (Moves down first, then to center)
-  const tlX = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [xLeft, xLeft, xLeft, "0vw", "0vw"]);
-  const tlY = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [yTop, yBottom, yBottom, "0vh", "0vh"]);
+  const tlX = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [xLeft, xLeft, xLeft, "0vw", "0vw"], { clamp: true });
+  const tlY = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [yTop, yBottom, yBottom, "0vh", "0vh"], { clamp: true });
 
   // Bottom Right Image path translations (Moves up first, then to center)
-  const brX = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [xRight, xRight, xRight, "0vw", "0vw"]);
-  const brY = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [yBottom, yTop, yTop, "0vh", "0vh"]);
+  const brX = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [xRight, xRight, xRight, "0vw", "0vw"], { clamp: true });
+  const brY = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [yBottom, yTop, yTop, "0vh", "0vh"], { clamp: true });
 
   // Bottom Left Image path translations (Stays bottom-left, then merges center)
-  const blX = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [xLeft, xLeft, xLeft, "0vw", "0vw"]);
-  const blY = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [yBottom, yBottom, yBottom, "0vh", "0vh"]);
+  const blX = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [xLeft, xLeft, xLeft, "0vw", "0vw"], { clamp: true });
+  const blY = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [yBottom, yBottom, yBottom, "0vh", "0vh"], { clamp: true });
 
   // Top Right Image (Hero Background) translations (Stays top-right, then merges center)
-  const trX = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [xRight, xRight, xRight, "0vw", "0vw"]);
-  const trY = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [yTop, yTop, yTop, "0vh", "0vh"]);
+  const trX = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [xRight, xRight, xRight, "0vw", "0vw"], { clamp: true });
+  const trY = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [yTop, yTop, yTop, "0vh", "0vh"], { clamp: true });
 
   // Top Right Image (Hero background) expands to premium card panel after merge phase
   const startWidth = isMobile ? "42vw" : "36vw";
@@ -92,21 +59,21 @@ export default function Hero() {
   const endWidth = isMobile ? "92vw" : "94vw";
   const endHeight = isMobile ? "75vh" : "82vh";
 
-  const heroWidth = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startWidth, startWidth, endWidth, endWidth]);
-  const heroHeight = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startHeight, startHeight, endHeight, endHeight]);
+  const heroWidth = useTransform(smoothProgress, [0, 0.5, 0.8, 1], [startWidth, startWidth, endWidth, endWidth], { clamp: true });
+  const heroHeight = useTransform(smoothProgress, [0, 0.5, 0.8, 1], [startHeight, startHeight, endHeight, endHeight], { clamp: true });
 
   // Fade out other images as the main hero expands (slower fadeout)
-  const underImagesOpacity = useTransform(smoothProgress, [0.65, 0.85], [1, 0]);
+  const underImagesOpacity = useTransform(smoothProgress, [0.5, 0.7, 1], [1, 0, 0], { clamp: true });
 
-  // Animate background image blur as it expands (stronger blur triggers only at the last point)
-  const imageBlur = useTransform(smoothProgress, [0.85, 0.95], ["blur(0px)", "blur(12px)"]);
+  // Animate background image blur overlay opacity (buttery-smooth hardware-accelerated rendering)
+  const blurOpacity = useTransform(smoothProgress, [0.6, 0.75, 1], [0, 1, 1], { clamp: true });
 
   // Fade in the dark/warm color overlay over the expanded hero photo at the last point
-  const overlayOpacity = useTransform(smoothProgress, [0.85, 0.95], [0, 0.85]);
+  const overlayOpacity = useTransform(smoothProgress, [0.6, 0.75, 1], [0, 0.85, 0.85], { clamp: true });
 
   // Fade in content typography ONLY at the last point of the hero section
-  const contentOpacity = useTransform(smoothProgress, [0.90, 0.98], [0, 1]);
-  const contentY = useTransform(smoothProgress, [0.90, 0.98], [20, 0]);
+  const contentOpacity = useTransform(smoothProgress, [0.65, 0.8, 1], [0, 1, 1], { clamp: true });
+  const contentY = useTransform(smoothProgress, [0.65, 0.8, 1], [20, 0, 0], { clamp: true });
 
   // Image assets mapped to grid
   const images = {
@@ -162,11 +129,26 @@ export default function Hero() {
             transformTemplate={transformTemplate}
             className={`${styles.baseImage} ${styles.z40}`}
           >
-            <motion.img 
+            {/* Clear Image (Base Layer) */}
+            <img 
               src={images.topRight} 
               alt="MADarc Landscape Design" 
               className={styles.img} 
-              style={{ filter: imageBlur }}
+            />
+
+            {/* Blurred Image Overlay (Opacity animated for hardware acceleration) */}
+            <motion.img 
+              src={images.topRight} 
+              alt="" 
+              className={styles.img} 
+              style={{ 
+                position: 'absolute',
+                inset: 0,
+                filter: 'blur(12px)',
+                opacity: blurOpacity,
+                transform: 'scale(1.05)', // Hide fuzzy blur bleed behind rounded corners
+                pointerEvents: 'none'
+              }}
             />
             
             {/* Soft cream overlay that dims the image slightly for text contrast */}
