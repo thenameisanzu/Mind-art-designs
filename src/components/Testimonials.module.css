@@ -34,6 +34,11 @@
 .carouselWrapper {
   width: 100%;
   overflow: hidden;
+  position: relative;
+}
+
+.slide {
+  width: 100%;
 }
 
 .controlsRow {

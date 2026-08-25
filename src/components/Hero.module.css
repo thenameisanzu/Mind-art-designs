@@ -167,6 +167,9 @@
 }
 
 @media (max-width: 768px) {
+  .scrollDown {
+    bottom: 85px; /* Elevated on mobile to clear browser toolbars/chrome */
+  }
   .container {
     padding: 0 6%;
     justify-content: center;

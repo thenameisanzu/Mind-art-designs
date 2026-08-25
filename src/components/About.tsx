@@ -115,6 +115,7 @@ export default function About() {
                 src="/about_architecture.jpg" 
                 alt="Minimalist circular architectural opening with tree canopy" 
                 className={styles.image} 
+                loading="lazy"
               />
             </motion.div>
           </div>

@@ -96,7 +96,7 @@ export default function Testimonials() {
         {/* Review Content */}
         <div className={styles.sliderContent}>
           <div className={styles.carouselWrapper}>
-            <AnimatePresence mode="wait" initial={false} custom={direction}>
+            <AnimatePresence mode="popLayout" initial={false} custom={direction}>
               <motion.div
                 key={activeIndex}
                 custom={direction}

@@ -11,10 +11,24 @@ export default function CursorFollower() {
   const cursorY = useMotionValue(-100);
   
   const springConfig = { damping: 25, stiffness: 250 };
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
+    // Detect touch device to bypass listener creation on mobile/tablet
+    const checkTouch = () => {
+      return (
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0
+      );
+    };
+
+    if (checkTouch()) {
+      setIsTouchDevice(true);
+      return;
+    }
+
     setMounted(true);
     
     const moveCursor = (e: MouseEvent) => {
@@ -47,7 +61,7 @@ export default function CursorFollower() {
     };
   }, [cursorX, cursorY]);
 
-  if (!mounted) return null;
+  if (isTouchDevice || !mounted) return null;
 
   return (
     <motion.div

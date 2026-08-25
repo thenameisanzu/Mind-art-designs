@@ -172,6 +172,7 @@ export default function Portfolio() {
                   src={project.image} 
                   alt={project.title} 
                   className={styles.image}
+                  loading="lazy"
                 />
                 <div className={styles.overlay}>
                   <div className={styles.overlayIcon}>
@@ -227,6 +228,7 @@ export default function Portfolio() {
                     src={currentProject.image} 
                     alt={currentProject.title} 
                     className={styles.lightboxImage}
+                    loading="lazy"
                   />
                 </div>
 
