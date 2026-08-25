@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import CursorFollower from '@/components/CursorFollower';
+import SmoothScroll from '@/components/SmoothScroll';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -27,8 +28,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <CursorFollower />
-        {children}
+        <SmoothScroll>
+          <CursorFollower />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
