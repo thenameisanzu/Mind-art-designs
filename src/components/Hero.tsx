@@ -96,12 +96,15 @@ export default function Hero() {
   // Fade out other images as the main hero expands (slower fadeout)
   const underImagesOpacity = useTransform(smoothProgress, [0.65, 0.85], [1, 0]);
 
-  // Fade in the dark/warm color overlay over the expanded hero photo to keep overlay typography readable
-  const overlayOpacity = useTransform(smoothProgress, [0.70, 0.90], [0, 0.55]);
+  // Animate background image blur as it expands
+  const imageBlur = useTransform(smoothProgress, [0.65, 0.92], ["blur(0px)", "blur(6px)"]);
 
-  // Fade in and slide up content typography near the end of expansion
-  const contentOpacity = useTransform(smoothProgress, [0.88, 0.98], [0, 1]);
-  const contentY = useTransform(smoothProgress, [0.88, 0.98], [40, 0]);
+  // Fade in the dark/warm color overlay over the expanded hero photo to keep overlay typography readable
+  const overlayOpacity = useTransform(smoothProgress, [0.70, 0.90], [0, 0.75]);
+
+  // Fade in and slide up content typography near the end of expansion (fades in earlier for stability)
+  const contentOpacity = useTransform(smoothProgress, [0.75, 0.90], [0, 1]);
+  const contentY = useTransform(smoothProgress, [0.75, 0.90], [30, 0]);
 
   // Image assets mapped to grid
   const images = {
@@ -157,7 +160,12 @@ export default function Hero() {
             transformTemplate={transformTemplate}
             className={`${styles.baseImage} ${styles.z40}`}
           >
-            <img src={images.topRight} alt="MADarc Landscape Design" className={styles.img} />
+            <motion.img 
+              src={images.topRight} 
+              alt="MADarc Landscape Design" 
+              className={styles.img} 
+              style={{ filter: imageBlur }}
+            />
             
             {/* Soft cream overlay that dims the image slightly for text contrast */}
             <motion.div 
