@@ -68,10 +68,12 @@
 /* Text Content Overlay Layer */
 .container {
   position: absolute;
-  width: 100%;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 8%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 94vw;
+  height: 82vh;
+  padding: 0 6%;
   z-index: 50;
   pointer-events: none; /* Let scroll events pass through */
   display: flex;
@@ -199,5 +201,10 @@
       rgba(253, 248, 244, 0.85) 60%,
       rgba(253, 248, 244, 0.7) 100%
     );
+  }
+  .container {
+    width: 92vw;
+    height: 75vh;
+    padding: 0 6%;
   }
 }

@@ -86,12 +86,14 @@ export default function Hero() {
   const trX = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [xRight, xRight, xRight, "0vw", "0vw"]);
   const trY = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [yTop, yTop, yTop, "0vh", "0vh"]);
 
-  // Top Right Image (Hero background) expands to full viewport after merge phase (stretched range for slow expansion)
+  // Top Right Image (Hero background) expands to premium card panel after merge phase
   const startWidth = isMobile ? "42vw" : "36vw";
   const startHeight = isMobile ? "18vh" : "24vh";
+  const endWidth = isMobile ? "92vw" : "94vw";
+  const endHeight = isMobile ? "75vh" : "82vh";
 
-  const heroWidth = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startWidth, startWidth, "100vw", "100vw"]);
-  const heroHeight = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startHeight, startHeight, "100vh", "100vh"]);
+  const heroWidth = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startWidth, startWidth, endWidth, endWidth]);
+  const heroHeight = useTransform(smoothProgress, [0, 0.65, 0.95, 1], [startHeight, startHeight, endHeight, endHeight]);
 
   // Fade out other images as the main hero expands (slower fadeout)
   const underImagesOpacity = useTransform(smoothProgress, [0.65, 0.85], [1, 0]);
