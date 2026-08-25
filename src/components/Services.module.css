@@ -1,0 +1,94 @@
+.servicesSection {
+  background: linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary));
+  border-bottom: 1px solid var(--border-color);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.card {
+  background: #ffffff; /* White card for light mode contrast */
+  border: 1px solid var(--border-color);
+  padding: 40px 30px;
+  position: relative;
+  transition: var(--transition-smooth);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(140, 113, 76, 0.03); /* Soft warm-toned shadow */
+  border-radius: 16px;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(140, 113, 76, 0.07);
+}
+
+.iconContainer {
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: var(--transition-smooth);
+}
+
+.card:hover .iconContainer {
+  transform: scale(1.1);
+  color: var(--accent-dark); /* Darker gold on hover for contrast */
+}
+
+.cardTitle {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+.cardDesc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  font-weight: 300;
+  flex-grow: 1;
+}
+
+/* Subtle corner mark that activates on hover */
+.cardCorner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 10px 10px;
+  border-color: transparent transparent transparent transparent;
+  transition: var(--transition-quick);
+}
+
+.card:hover .cardCorner {
+  border-color: transparent transparent var(--accent) transparent;
+  border-width: 0 0 15px 15px;
+}
+
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    padding: 30px 24px;
+  }
+}
