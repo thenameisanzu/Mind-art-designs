@@ -98,11 +98,11 @@ export default function Hero() {
   // Fade out other images as the main hero expands (slower fadeout)
   const underImagesOpacity = useTransform(smoothProgress, [0.65, 0.85], [1, 0]);
 
-  // Animate background image blur as it expands
-  const imageBlur = useTransform(smoothProgress, [0.65, 0.92], ["blur(0px)", "blur(6px)"]);
+  // Animate background image blur as it expands (stronger blur for text readability)
+  const imageBlur = useTransform(smoothProgress, [0.65, 0.92], ["blur(0px)", "blur(12px)"]);
 
   // Fade in the dark/warm color overlay over the expanded hero photo to keep overlay typography readable
-  const overlayOpacity = useTransform(smoothProgress, [0.70, 0.90], [0, 0.75]);
+  const overlayOpacity = useTransform(smoothProgress, [0.70, 0.90], [0, 0.85]);
 
   // Fade in and slide up content typography near the end of expansion (fades in earlier for stability)
   const contentOpacity = useTransform(smoothProgress, [0.75, 0.90], [0, 1]);
@@ -179,6 +179,7 @@ export default function Hero() {
           {/* Staggered typography contents (fades in at bottom) */}
           <motion.div 
             style={{ opacity: contentOpacity, y: contentY }}
+            transformTemplate={transformTemplate}
             className={styles.container}
           >
             <div className={styles.content}>
