@@ -8,15 +8,27 @@ import styles from './Hero.module.css';
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Tracks mobile width for layout offsets
-  const [isMobile, setIsMobile] = useState(false);
+  // Tracks mobile/tablet/desktop width for layout offsets
+  const [screenType, setScreenType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const checkScreen = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setScreenType('mobile');
+      } else if (width <= 1024) {
+        setScreenType('tablet');
+      } else {
+        setScreenType('desktop');
+      }
+    };
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
   }, []);
+
+  const isMobile = screenType === 'mobile';
+  const isTablet = screenType === 'tablet';
 
   // Tracks the scroll progress of the 450vh hero section
   const { scrollYProgress } = useScroll({
@@ -32,10 +44,10 @@ export default function Hero() {
   });
 
   // Default coordinate offsets relative to center for the 4 grid blocks
-  const xLeft = isMobile ? "-25vw" : "-20vw";
-  const xRight = isMobile ? "25vw" : "20vw";
-  const yTop = isMobile ? "-12vh" : "-14vh";
-  const yBottom = isMobile ? "12vh" : "14vh";
+  const xLeft = isMobile ? "-25vw" : isTablet ? "-24vw" : "-20vw";
+  const xRight = isMobile ? "25vw" : isTablet ? "24vw" : "20vw";
+  const yTop = isMobile ? "-12vh" : isTablet ? "-16vh" : "-14vh";
+  const yBottom = isMobile ? "12vh" : isTablet ? "16vh" : "14vh";
 
   // Top Left Image path translations (Moves down first, then to center)
   const tlX = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [xLeft, xLeft, xLeft, "0vw", "0vw"], { clamp: true });
@@ -54,8 +66,8 @@ export default function Hero() {
   const trY = useTransform(smoothProgress, [0, 0.2, 0.25, 0.5, 1], [yTop, yTop, yTop, "0vh", "0vh"], { clamp: true });
 
   // Top Right Image (Hero background) expands to premium card panel after merge phase
-  const startWidth = isMobile ? "42vw" : "36vw";
-  const startHeight = isMobile ? "18vh" : "24vh";
+  const startWidth = isMobile ? "42vw" : isTablet ? "45vw" : "36vw";
+  const startHeight = isMobile ? "18vh" : isTablet ? "30vh" : "24vh";
   const endWidth = isMobile ? "92vw" : "94vw";
   const endHeight = isMobile ? "75vh" : "82vh";
 
