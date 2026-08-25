@@ -104,9 +104,9 @@ export default function Hero() {
   // Fade in the dark/warm color overlay over the expanded hero photo to keep overlay typography readable
   const overlayOpacity = useTransform(smoothProgress, [0.70, 0.90], [0, 0.85]);
 
-  // Fade in and slide up content typography near the end of expansion (fades in earlier for stability)
-  const contentOpacity = useTransform(smoothProgress, [0.75, 0.90], [0, 1]);
-  const contentY = useTransform(smoothProgress, [0.75, 0.90], [30, 0]);
+  // Content typography is always visible as the primary hero section from landing page load
+  const contentOpacity = 1;
+  const contentY = 0;
 
   // Image assets mapped to grid
   const images = {
