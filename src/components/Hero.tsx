@@ -17,6 +17,44 @@ export default function Hero() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+  const lockArmedRef = useRef(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+
+      const endOfHero = containerRef.current.offsetTop + containerRef.current.offsetHeight - window.innerHeight;
+      const currentScroll = window.scrollY;
+
+      // Re-arm speed bump lock if scrolling back up inside the hero section
+      if (currentScroll < endOfHero - 50) {
+        lockArmedRef.current = true;
+      }
+
+      // If the lock is armed and the scroll reaches or overflows the end of the hero
+      if (lockArmedRef.current && currentScroll >= endOfHero - 5) {
+        if ((window as any).lenisInstance) {
+          (window as any).lenisInstance.scrollTo(endOfHero, { immediate: true });
+        } else {
+          window.scrollTo(0, endOfHero);
+        }
+
+        // Reset the timeout. Disarm the lock ONLY when the scroll events pause for 200ms
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+          lockArmedRef.current = false;
+        }, 200);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: false });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   // Tracks the scroll progress of the 450vh hero section
   const { scrollYProgress } = useScroll({
     target: containerRef,
