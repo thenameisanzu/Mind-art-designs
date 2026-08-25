@@ -54,9 +54,12 @@ export default function Hero() {
   const trX = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [xRight, xRight, xRight, "0vw", "0vw"]);
   const trY = useTransform(smoothProgress, [0, 0.3, 0.35, 0.65, 1], [yTop, yTop, yTop, "0vh", "0vh"]);
 
-  // Top Right Image (Hero background) expands to full viewport after merge phase
-  const heroWidth = useTransform(smoothProgress, [0.65, 0.72, 0.92, 1], ["36vw", "36vw", "100vw", "100vw"]);
-  const heroHeight = useTransform(smoothProgress, [0.65, 0.72, 0.92, 1], ["24vh", "24vh", "100vh", "100vh"]);
+  // Top Right Image (Hero background) expands to full viewport after merge phase (responsive starting bounds)
+  const startWidth = isMobile ? "42vw" : "36vw";
+  const startHeight = isMobile ? "18vh" : "24vh";
+
+  const heroWidth = useTransform(smoothProgress, [0.65, 0.72, 0.92, 1], [startWidth, startWidth, "100vw", "100vw"]);
+  const heroHeight = useTransform(smoothProgress, [0.65, 0.72, 0.92, 1], [startHeight, startHeight, "100vh", "100vh"]);
 
   // Fade out other images as the main hero expands
   const underImagesOpacity = useTransform(smoothProgress, [0.68, 0.78], [1, 0]);
