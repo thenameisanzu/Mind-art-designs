@@ -39,6 +39,7 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -229,7 +230,7 @@ button, input, textarea {
 
 /* Lenis smooth scrolling performance boilerplate */
 html.lenis, html.lenis body {
-  height: auto;
+  height: auto !important;
 }
 
 .lenis.lenis-smooth {

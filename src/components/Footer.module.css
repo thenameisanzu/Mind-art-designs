@@ -171,6 +171,11 @@
     flex-direction: column;
     gap: 40px;
   }
+  .brandCol,
+  .linksCol,
+  .socialCol {
+    flex: none; /* Reset flex basis on mobile to prevent stretching heights */
+  }
   .bottomRow {
     flex-direction: column-reverse;
     align-items: center;
